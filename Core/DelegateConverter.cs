@@ -14,7 +14,7 @@ namespace DynamicClass.Core {
         /// </summary>
         /// <param name="method">要转换的方法信息</param>
         /// <returns>转换后的Func委托</returns>
-        internal static Delegate ConvertToFuncDelegate(MethodInfo method) {
+        internal static Delegate ConvertToDelegate(MethodInfo method) {
             if (method == null) {
                 throw new ArgumentNullException(nameof(method), "方法信息不能为空");
             }
@@ -54,7 +54,7 @@ namespace DynamicClass.Core {
         /// <typeparam name="TFunc">Func委托类型，如 Func<int, string>、Func<double, double, bool> 等</typeparam>
         /// <param name="method">要转换的方法信息</param>
         /// <returns>强类型的Func委托</returns>
-        internal static TFunc ConvertToTypedFuncDelegate<TFunc>(MethodInfo method) where TFunc : Delegate {
+        internal static TFunc ConvertToTypedFunc<TFunc>(MethodInfo method) where TFunc : Delegate {
             if (method == null) {
                 throw new ArgumentNullException(nameof(method), "方法信息不能为空");
             }
@@ -71,7 +71,7 @@ namespace DynamicClass.Core {
             }
 
             // 创建委托并强类型返回
-            Delegate delegateInstance = ConvertToFuncDelegate(method);
+            Delegate delegateInstance = ConvertToDelegate(method);
 
             // 尝试转换为强类型
             TFunc? typedDelegate = delegateInstance as TFunc ?? throw new InvalidCastException($"无法将类型为 {delegateInstance.GetType().Name} 的委托转换为 TFunc 类型");

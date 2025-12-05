@@ -39,8 +39,8 @@ namespace DynamicClass {
         /// </summary>
         /// <param name="method">要转换的方法信息</param>
         /// <returns>转换后的Func委托</returns>
-        public static Delegate ConvertToFuncDelegate(MethodInfo method) {
-            return Core.DynamicCompiler.ConvertToFuncDelegate(method);
+        public static Delegate ConvertToDelegate(MethodInfo method) {
+            return Core.DynamicCompiler.ConvertToDelegate(method);
         }
 
         /// <summary>
@@ -49,8 +49,8 @@ namespace DynamicClass {
         /// <typeparam name="TFunc">Func委托类型，如 Func<int, string>、Func<double, double, bool> 等</typeparam>
         /// <param name="method">要转换的方法信息</param>
         /// <returns>强类型的Func委托</returns>
-        public static TFunc ConvertToTypedFuncDelegate<TFunc>(MethodInfo method) where TFunc : Delegate {
-            return Core.DynamicCompiler.ConvertToTypedFuncDelegate<TFunc>(method);
+        public static TFunc ConvertToTypedFunc<TFunc>(MethodInfo method) where TFunc : Delegate {
+            return Core.DynamicCompiler.ConvertToTypedFunc<TFunc>(method);
         }
 
         /// <summary>

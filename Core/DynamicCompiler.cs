@@ -47,22 +47,22 @@ namespace DynamicClass.Core {
         }
 
         /// <summary>
-        /// 将方法转换为对应的Func委托
+        /// 将方法转换为 Delegate 委托
         /// </summary>
         /// <param name="method">要转换的方法信息</param>
-        /// <returns>转换后的Func委托</returns>
-        public static Delegate ConvertToFuncDelegate(MethodInfo method) {
-            return DelegateConverter.ConvertToFuncDelegate(method);
+        /// <returns>转换后的 Delegate 委托</returns>
+        public static Delegate ConvertToDelegate(MethodInfo method) {
+            return DelegateConverter.ConvertToDelegate(method);
         }
 
         /// <summary>
-        /// 将方法转换为强类型的Func委托（泛型版本）
+        /// 将方法转换为强类型的 Func<> 委托
         /// </summary>
-        /// <typeparam name="TFunc">Func委托类型，如 Func<int, string>、Func<double, double, bool> 等</typeparam>
+        /// <typeparam name="TFunc">Func<> 委托类型，如 Func<int, string>、Func<double, double, bool> 等</typeparam>
         /// <param name="method">要转换的方法信息</param>
-        /// <returns>强类型的Func委托</returns>
-        public static TFunc ConvertToTypedFuncDelegate<TFunc>(MethodInfo method) where TFunc : Delegate {
-            return DelegateConverter.ConvertToTypedFuncDelegate<TFunc>(method);
+        /// <returns>强类型的 Func<> 委托</returns>
+        public static TFunc ConvertToTypedFunc<TFunc>(MethodInfo method) where TFunc : Delegate {
+            return DelegateConverter.ConvertToTypedFunc<TFunc>(method);
         }
 
         /// <summary>
