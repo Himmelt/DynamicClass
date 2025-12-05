@@ -306,6 +306,88 @@ public static class CollectionDemo
 
             Console.WriteLine();
 
+            // 示例4.5：Func委托直接调用示例
+            Console.WriteLine("4.5. Func委托直接调用示例：");
+            string simpleMathCode = @"using System;
+
+public static class SimpleMath
+{
+    public static int Add(int a, int b)
+    {
+        return a + b;
+    }
+    
+    public static int Multiply(int x, int y)
+    {
+        return x * y;
+    }
+    
+    public static double Divide(double numerator, double denominator)
+    {
+        return numerator / denominator;
+    }
+    
+    public static string ConcatStrings(string str1, string str2)
+    {
+        return str1 + str2;
+    }
+}";
+
+            try
+            {
+                var compilationResult = compiler.CompileCode(simpleMathCode);
+                if (compilationResult.Success)
+                {
+                    Console.WriteLine("   ✅ 编译成功！");
+
+                    var methods = compiler.GetPublicStaticMethods(compilationResult.Assembly);
+                    
+                    foreach (var method in methods)
+                    {
+                        try
+                        {
+                            var funcDelegate = compiler.ConvertToFuncDelegate(method);
+                            Console.WriteLine($"   📋 方法：{method.Name}");
+                            
+                            // 演示直接调用Func委托的语法
+                            switch (method.Name)
+                            {
+                                case "Add":
+                                    // 直接调用：var result = funcDelegate(5, 3);
+                                    var addResult = (int)funcDelegate.DynamicInvoke(5, 3);
+                                    Console.WriteLine($"      ✅ var result = func(5, 3); → 结果：{addResult}");
+                                    break;
+                                case "Multiply":
+                                    // 直接调用：var result = funcDelegate(4, 7);
+                                    var multiplyResult = (int)funcDelegate.DynamicInvoke(4, 7);
+                                    Console.WriteLine($"      ✅ var result = func(4, 7); → 结果：{multiplyResult}");
+                                    break;
+                                case "Divide":
+                                    // 直接调用：var result = funcDelegate(15.0, 3.0);
+                                    var divideResult = (double)funcDelegate.DynamicInvoke(15.0, 3.0);
+                                    Console.WriteLine($"      ✅ var result = func(15.0, 3.0); → 结果：{divideResult}");
+                                    break;
+                                case "ConcatStrings":
+                                    // 直接调用：var result = funcDelegate("Hello", "World");
+                                    var concatResult = (string)funcDelegate.DynamicInvoke("Hello", "World");
+                                    Console.WriteLine($"      ✅ var result = func(\"Hello\", \"World\"); → 结果：{concatResult}");
+                                    break;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"      ❌ Func调用失败：{ex.Message}");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"   ❌ 发生异常：{ex.Message}");
+            }
+
+            Console.WriteLine();
+
             // 示例5：高级智能程序集引用分析示例
             Console.WriteLine("5. 高级智能程序集引用分析示例：");
             string advancedCode = @"
@@ -484,6 +566,117 @@ public static class QualifiedNameTest
 
             Console.WriteLine();
 
+            // 示例6.5：强类型Func委托直接调用示例
+            Console.WriteLine("6.5. 强类型Func委托直接调用示例：");
+            
+            // 定义一个简单的数学类作为演示
+            string typedFuncCode = @"
+using System;
+
+public static class MathOperations
+{
+    // 简单的一元函数
+    public static int Square(int x)
+    {
+        return x * x;
+    }
+    
+    // 二元函数
+    public static double Add(double a, double b)
+    {
+        return a + b;
+    }
+    
+    // 字符串连接函数
+    public static string Concat(string prefix, string suffix)
+    {
+        return $""{prefix}_{suffix}"";
+    }
+    
+    // 逻辑判断函数
+    public static bool IsEven(int number)
+    {
+        return number % 2 == 0;
+    }
+}";
+
+            try
+            {
+                var compilationResult = compiler.CompileCode(typedFuncCode);
+                if (compilationResult.Success)
+                {
+                    Console.WriteLine("   ✅ 编译成功！");
+                    
+                    var methods = compiler.GetPublicStaticMethods(compilationResult.Assembly);
+                    Console.WriteLine($"   ✅ 找到 {methods.Count} 个可用方法：");
+                    
+                    // 演示如何使用强类型Func委托
+                    foreach (var method in methods)
+                    {
+                        try
+                        {
+                            Console.WriteLine($"   📋 方法：{method.Name}");
+                            
+                            // 根据方法签名选择对应的强类型Func委托
+                            var parameters = method.GetParameters();
+                            Type returnType = method.ReturnType;
+                            
+                            if (parameters.Length == 1 && returnType == typeof(int))
+                            {
+                                // Func<int, int>
+                                var funcDelegate = compiler.ConvertToTypedFuncDelegate<Func<int, int>>(method);
+                                int result = funcDelegate(5);
+                                Console.WriteLine($"      ✅ var result = func(5); → 结果：{result}");
+                                Console.WriteLine($"      📝 委托类型：{funcDelegate.GetType().Name}");
+                            }
+                            else if (parameters.Length == 2 && returnType == typeof(double))
+                            {
+                                // Func<double, double, double>
+                                var funcDelegate = compiler.ConvertToTypedFuncDelegate<Func<double, double, double>>(method);
+                                double result = funcDelegate(3.5, 2.5);
+                                Console.WriteLine($"      ✅ var result = func(3.5, 2.5); → 结果：{result}");
+                                Console.WriteLine($"      📝 委托类型：{funcDelegate.GetType().Name}");
+                            }
+                            else if (parameters.Length == 2 && returnType == typeof(string))
+                            {
+                                // Func<string, string, string>
+                                var funcDelegate = compiler.ConvertToTypedFuncDelegate<Func<string, string, string>>(method);
+                                string result = funcDelegate("Hello", "World");
+                                Console.WriteLine($"      ✅ var result = func(\"Hello\", \"World\"); → 结果：{result}");
+                                Console.WriteLine($"      📝 委托类型：{funcDelegate.GetType().Name}");
+                            }
+                            else if (parameters.Length == 1 && returnType == typeof(bool))
+                            {
+                                // Func<int, bool>
+                                var funcDelegate = compiler.ConvertToTypedFuncDelegate<Func<int, bool>>(method);
+                                bool result = funcDelegate(8);
+                                Console.WriteLine($"      ✅ var result = func(8); → 结果：{result}");
+                                Console.WriteLine($"      📝 委托类型：{funcDelegate.GetType().Name}");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"      ❌ 转换失败：{ex.Message}");
+                        }
+                    }
+                    
+                    Console.WriteLine("   💡 强类型Func委托的优势：");
+                    Console.WriteLine("      - 直接获得 Func<int, int>、Func<string, string, string> 等强类型委托");
+                    Console.WriteLine("      - 编译时类型安全，IDE智能提示支持");
+                    Console.WriteLine("      - 可以直接调用，无需DynamicInvoke");
+                }
+                else
+                {
+                    Console.WriteLine($"   ❌ 编译失败：{compilationResult.ErrorMessage}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"   ❌ 发生异常：{ex.Message}");
+            }
+
+            Console.WriteLine();
+
             // 示例7：演示动态注册新的检测规则
             Console.WriteLine("7. 动态扩展检测规则示例：");
             
@@ -500,8 +693,6 @@ public static class QualifiedNameTest
 
             Console.WriteLine();
             Console.WriteLine("=== 演示结束 ===");
-            Console.WriteLine("按任意键退出...");
-            Console.ReadKey();
         }
     }
 }

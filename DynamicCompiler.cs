@@ -511,6 +511,13 @@ namespace DynamicClass
                 throw new ArgumentNullException(nameof(method), "方法信息不能为空");
             }
 
+            // 验证方法是否适合转换为Func委托
+            var validation = ValidateMethodForFuncConversion(method);
+            if (!validation.IsValid)
+            {
+                throw new ArgumentException($"方法 {method.Name} 不适合转换为Func委托: {validation.ErrorMessage}");
+            }
+
             // 获取方法的参数类型和返回类型
             Type[] parameterTypes = method.GetParameters().Select(p => p.ParameterType).ToArray();
             Type returnType = method.ReturnType;
@@ -536,6 +543,85 @@ namespace DynamicClass
 
             // 创建委托
             return Delegate.CreateDelegate(funcType, method);
+        }
+
+        /// <summary>
+        /// 验证方法是否适合转换为Func委托
+        /// </summary>
+        /// <param name="method">要验证的方法</param>
+        /// <returns>验证结果</returns>
+        private MethodValidationResult ValidateMethodForFuncConversion(MethodInfo method)
+        {
+            // 检查方法是否必须为静态方法
+            if (!method.IsStatic)
+            {
+                return MethodValidationResult.Failed("方法必须是静态方法");
+            }
+
+            // 检查返回类型
+            if (!IsAllowedReturnType(method.ReturnType))
+            {
+                return MethodValidationResult.Failed($"返回类型 {method.ReturnType.Name} 不被允许，只支持基础类型和string");
+            }
+
+            // 检查参数数量
+            var parameters = method.GetParameters();
+            if (parameters.Length > 16)
+            {
+                return MethodValidationResult.Failed($"参数数量超过16个限制，当前为 {parameters.Length} 个");
+            }
+
+            // 检查参数类型
+            for (int i = 0; i < parameters.Length; i++)
+            {
+                if (!IsAllowedParameterType(parameters[i].ParameterType))
+                {
+                    return MethodValidationResult.Failed($"参数 {parameters[i].Name} 类型 {parameters[i].ParameterType.Name} 不被允许，只支持基础类型和string");
+                }
+            }
+
+            return MethodValidationResult.Success();
+        }
+
+        /// <summary>
+        /// 检查类型是否为允许的参数类型
+        /// </summary>
+        /// <param name="type">要检查的类型</param>
+        /// <returns>是否为允许的类型</returns>
+        private bool IsAllowedParameterType(Type type)
+        {
+            return IsAllowedBasicType(type) || type == typeof(string);
+        }
+
+        /// <summary>
+        /// 检查类型是否为允许的返回类型
+        /// </summary>
+        /// <param name="type">要检查的类型</param>
+        /// <returns>是否为允许的类型</returns>
+        private bool IsAllowedReturnType(Type type)
+        {
+            return IsAllowedBasicType(type) || type == typeof(string);
+        }
+
+        /// <summary>
+        /// 检查类型是否为允许的基础类型
+        /// </summary>
+        /// <param name="type">要检查的类型</param>
+        /// <returns>是否为允许的基础类型</returns>
+        private bool IsAllowedBasicType(Type type)
+        {
+            if (type.IsPrimitive)
+            {
+                return true; // bool, byte, char, short, int, long, float, double, decimal, nint, nuint
+            }
+
+            // 添加对DateTime和Guid的支持
+            if (type == typeof(DateTime) || type == typeof(Guid) || type == typeof(TimeSpan))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -566,6 +652,45 @@ namespace DynamicClass
         }
 
         /// <summary>
+        /// 将方法转换为强类型的Func委托（泛型版本）
+        /// </summary>
+        /// <typeparam name="TFunc">Func委托类型，如 Func<int, string>、Func<double, double, bool> 等</typeparam>
+        /// <param name="method">要转换的方法信息</param>
+        /// <returns>强类型的Func委托</returns>
+        public TFunc ConvertToTypedFuncDelegate<TFunc>(MethodInfo method) where TFunc : Delegate
+        {
+            if (method == null)
+            {
+                throw new ArgumentNullException(nameof(method), "方法信息不能为空");
+            }
+
+            // 验证方法是否适合转换为Func委托
+            var validation = ValidateMethodForFuncConversion(method);
+            if (!validation.IsValid)
+            {
+                throw new ArgumentException($"方法 {method.Name} 不适合转换为Func委托: {validation.ErrorMessage}");
+            }
+
+            // 验证TFunc是否是有效的Func委托类型
+            if (!IsValidFuncDelegateType(typeof(TFunc)))
+            {
+                throw new ArgumentException($"泛型类型 TFunc 必须是有效的Func委托类型");
+            }
+
+            // 创建委托并强类型返回
+            Delegate delegateInstance = ConvertToFuncDelegate(method);
+            
+            // 尝试转换为强类型
+            TFunc? typedDelegate = delegateInstance as TFunc;
+            if (typedDelegate == null)
+            {
+                throw new InvalidCastException($"无法将类型为 {delegateInstance.GetType().Name} 的委托转换为 TFunc 类型");
+            }
+
+            return typedDelegate;
+        }
+
+        /// <summary>
         /// 获取对应的Func委托类型
         /// </summary>
         /// <param name="genericArgumentCount">泛型参数数量（参数数量+1）</param>
@@ -593,6 +718,27 @@ namespace DynamicClass
                 case 17: return typeof(Func<,,,,,,,,,,,,,,,,>);
                 default: return null;
             }
+        }
+
+        /// <summary>
+        /// 检查类型是否为有效的Func委托类型
+        /// </summary>
+        /// <param name="type">要检查的类型</param>
+        /// <returns>是否为有效的Func委托类型</returns>
+        private bool IsValidFuncDelegateType(Type type)
+        {
+            if (!typeof(Delegate).IsAssignableFrom(type))
+            {
+                return false;
+            }
+
+            // 检查是否是Func委托类型
+            if (type.Name.StartsWith("Func`"))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 
@@ -636,5 +782,46 @@ namespace DynamicClass
         /// 错误信息
         /// </summary>
         public string ErrorMessage { get; set; } = string.Empty;
+    }
+
+    /// <summary>
+    /// 方法验证结果类
+    /// </summary>
+    public class MethodValidationResult
+    {
+        /// <summary>
+        /// 验证是否成功
+        /// </summary>
+        public bool IsValid { get; private set; }
+
+        /// <summary>
+        /// 错误信息
+        /// </summary>
+        public string ErrorMessage { get; private set; } = string.Empty;
+
+        private MethodValidationResult(bool isValid, string errorMessage)
+        {
+            IsValid = isValid;
+            ErrorMessage = errorMessage;
+        }
+
+        /// <summary>
+        /// 创建成功结果
+        /// </summary>
+        /// <returns>成功的结果对象</returns>
+        public static MethodValidationResult Success()
+        {
+            return new MethodValidationResult(true, string.Empty);
+        }
+
+        /// <summary>
+        /// 创建失败结果
+        /// </summary>
+        /// <param name="errorMessage">错误信息</param>
+        /// <returns>失败的结果对象</returns>
+        public static MethodValidationResult Failed(string errorMessage)
+        {
+            return new MethodValidationResult(false, errorMessage);
+        }
     }
 }
