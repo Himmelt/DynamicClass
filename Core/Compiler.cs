@@ -12,9 +12,7 @@ namespace DynamicClass.Core {
     /// 初始化编译器
     /// </remarks>
     /// <param name="codeAnalyzer">代码分析器实例</param>
-    internal class Compiler(CodeAnalyzer codeAnalyzer) {
-        private readonly CodeAnalyzer _codeAnalyzer = codeAnalyzer ?? throw new ArgumentNullException(nameof(codeAnalyzer));
-
+    internal static class Compiler {
         /// <summary>
         /// 编译C#静态类代码并返回编译结果
         /// </summary>
@@ -79,7 +77,7 @@ namespace DynamicClass.Core {
         /// </summary>
         /// <param name="filePath">文件路径</param>
         /// <returns>编译结果</returns>
-        internal CompilationResult CompileFromFile(string filePath) {
+        internal static CompilationResult CompileFromFile(string filePath) {
             if (string.IsNullOrWhiteSpace(filePath)) {
                 throw new ArgumentNullException(nameof(filePath), "文件路径不能为空");
             }

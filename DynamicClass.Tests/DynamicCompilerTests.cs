@@ -1,16 +1,5 @@
-using DynamicClass;
-using System;
-using System.Linq;
-using Xunit;
-
 namespace DynamicClass.Tests {
     public class DynamicCompilerTests {
-        private readonly DynamicCompiler _compiler;
-
-        public DynamicCompilerTests() {
-            _compiler = new DynamicCompiler();
-        }
-
         [Fact]
         public void CompileCode_ValidCode_ReturnsSuccess() {
             // Arrange
@@ -49,7 +38,7 @@ public static class Calculator
 }";
 
             // Act
-            var result = _compiler.CompileCode(validCode);
+            var result = DynamicCompiler.CompileCode(validCode);
 
             // Assert
             Assert.True(result.Success);
@@ -74,7 +63,7 @@ public static class Calculator
 }";
 
             // Act
-            var result = _compiler.CompileCode(invalidCode);
+            var result = DynamicCompiler.CompileCode(invalidCode);
 
             // Assert
             Assert.False(result.Success);
@@ -118,7 +107,7 @@ public static class Calculator
         return ""Hello, Dynamic Compilation!"";
     }
 }";
-            var compilationResult = _compiler.CompileCode(validCode);
+            var compilationResult = DynamicCompiler.CompileCode(validCode);
 
             // Act
             var methods = DynamicCompiler.GetPublicStaticMethods(compilationResult.Assembly);
@@ -145,12 +134,12 @@ public static class Calculator
         return a + b;
     }
 }";
-            var compilationResult = _compiler.CompileCode(validCode);
+            var compilationResult = DynamicCompiler.CompileCode(validCode);
             var methods = DynamicCompiler.GetPublicStaticMethods(compilationResult.Assembly);
             var addMethod = methods.First(m => m.Name == "Add");
 
             // Act
-            var funcDelegate = _compiler.ConvertToFuncDelegate(addMethod);
+            var funcDelegate = DynamicCompiler.ConvertToFuncDelegate(addMethod);
 
             // Assert
             Assert.NotNull(funcDelegate);
@@ -179,10 +168,10 @@ public static class Calculator
         return ""Hello, Dynamic Compilation!"";
     }
 }";
-            var compilationResult = _compiler.CompileCode(validCode);
+            var compilationResult = DynamicCompiler.CompileCode(validCode);
             var methods = DynamicCompiler.GetPublicStaticMethods(compilationResult.Assembly);
             var addMethod = methods.First(m => m.Name == "Add");
-            var funcDelegate = _compiler.ConvertToFuncDelegate(addMethod);
+            var funcDelegate = DynamicCompiler.ConvertToFuncDelegate(addMethod);
 
             // Act
             var validationResult = DynamicCompiler.ValidateFuncDelegate(funcDelegate, 10, 5);
@@ -209,10 +198,10 @@ public static class Calculator
         return (double)a / b;
     }
 }";
-            var compilationResult = _compiler.CompileCode(validCode);
+            var compilationResult = DynamicCompiler.CompileCode(validCode);
             var methods = DynamicCompiler.GetPublicStaticMethods(compilationResult.Assembly);
             var divideMethod = methods.First(m => m.Name == "Divide");
-            var funcDelegate = _compiler.ConvertToFuncDelegate(divideMethod);
+            var funcDelegate = DynamicCompiler.ConvertToFuncDelegate(divideMethod);
 
             // Act
             var validationResult = DynamicCompiler.ValidateFuncDelegate(funcDelegate, 10, 0);
@@ -241,12 +230,12 @@ public static class MathOperations
         return a + b;
     }
 }";
-            var compilationResult = _compiler.CompileCode(validCode);
+            var compilationResult = DynamicCompiler.CompileCode(validCode);
             var methods = DynamicCompiler.GetPublicStaticMethods(compilationResult.Assembly);
             var squareMethod = methods.First(m => m.Name == "Square");
 
             // Act
-            var funcDelegate = _compiler.ConvertToTypedFuncDelegate<Func<int, int>>(squareMethod);
+            var funcDelegate = DynamicCompiler.ConvertToTypedFuncDelegate<Func<int, int>>(squareMethod);
 
             // Assert
             Assert.NotNull(funcDelegate);
@@ -267,12 +256,12 @@ public static class MathOperations
         return a + b;
     }
 }";
-            var compilationResult = _compiler.CompileCode(validCode);
+            var compilationResult = DynamicCompiler.CompileCode(validCode);
             var methods = DynamicCompiler.GetPublicStaticMethods(compilationResult.Assembly);
             var addMethod = methods.First(m => m.Name == "Add");
 
             // Act
-            var funcDelegate = _compiler.ConvertToTypedFuncDelegate<Func<double, double, double>>(addMethod);
+            var funcDelegate = DynamicCompiler.ConvertToTypedFuncDelegate<Func<double, double, double>>(addMethod);
 
             // Assert
             Assert.NotNull(funcDelegate);
@@ -303,7 +292,7 @@ public static class TestClass
         return flag;
     }
 }";
-            var compilationResult = _compiler.CompileCode(validCode);
+            var compilationResult = DynamicCompiler.CompileCode(validCode);
 
             // Act
             var methods = DynamicCompiler.GetPublicStaticMethods(compilationResult.Assembly);
@@ -346,7 +335,7 @@ public static class CollectionDemo
 }";
 
             // Act
-            var result = _compiler.CompileCode(collectionCode);
+            var result = DynamicCompiler.CompileCode(collectionCode);
 
             // Assert
             Assert.True(result.Success);
@@ -361,7 +350,7 @@ public static class CollectionDemo
             Assert.True(File.Exists(filePath), "测试文件不存在: " + filePath);
 
             // Act
-            var result = _compiler.CompileFromFile(filePath);
+            var result = DynamicCompiler.CompileFromFile(filePath);
 
             // Assert
             Assert.True(result.Success);
@@ -375,13 +364,13 @@ public static class CollectionDemo
 
             // 验证Add方法
             var addMethod = methods.First(m => m.Name == "Add");
-            var addDelegate = _compiler.ConvertToTypedFuncDelegate<Func<int, int, int>>(addMethod);
+            var addDelegate = DynamicCompiler.ConvertToTypedFuncDelegate<Func<int, int, int>>(addMethod);
             int addResult = addDelegate(10, 5);
             Assert.Equal(15, addResult);
 
             // 验证GetMessage方法
             var messageMethod = methods.First(m => m.Name == "GetMessage");
-            var messageDelegate = _compiler.ConvertToTypedFuncDelegate<Func<string>>(messageMethod);
+            var messageDelegate = DynamicCompiler.ConvertToTypedFuncDelegate<Func<string>>(messageMethod);
             string messageResult = messageDelegate();
             Assert.Equal("Hello from file!", messageResult);
         }

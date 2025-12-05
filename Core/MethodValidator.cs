@@ -5,7 +5,7 @@ namespace DynamicClass.Core {
     /// <summary>
     /// 方法验证器，负责验证方法是否适合转换为Func委托
     /// </summary>
-    internal class MethodValidator {
+    internal static class MethodValidator {
         /// <summary>
         /// 验证方法是否适合转换为Func委托
         /// </summary>

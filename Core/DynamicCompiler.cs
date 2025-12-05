@@ -5,28 +5,13 @@ namespace DynamicClass.Core {
     /// <summary>
     /// 动态编译工具类，用于编译C#静态类代码并将方法转换为Func委托（对外统一接口）
     /// </summary>
-    public class DynamicCompiler {
-        private readonly CodeAnalyzer _codeAnalyzer;
-        private readonly Compiler _compiler;
-        private readonly DelegateConverter _delegateConverter;
-        private readonly MethodValidator _methodValidator;
-
-        /// <summary>
-        /// 初始化动态编译器
-        /// </summary>
-        public DynamicCompiler() {
-            _codeAnalyzer = new CodeAnalyzer();
-            _methodValidator = new MethodValidator();
-            _compiler = new Compiler(_codeAnalyzer);
-            _delegateConverter = new DelegateConverter(_methodValidator);
-        }
-
+    public static class DynamicCompiler {
         /// <summary>
         /// 编译C#静态类代码并返回编译结果
         /// </summary>
         /// <param name="code">要编译的C#静态类代码</param>
         /// <returns>编译结果，包含程序集和编译错误信息</returns>
-        public CompilationResult CompileCode(string code) {
+        public static CompilationResult CompileCode(string code) {
             return Compiler.CompileCode(code);
         }
 
@@ -35,8 +20,8 @@ namespace DynamicClass.Core {
         /// </summary>
         /// <param name="filePath">要编译的文本文件路径</param>
         /// <returns>编译结果，包含程序集和编译错误信息</returns>
-        public CompilationResult CompileFromFile(string filePath) {
-            return _compiler.CompileFromFile(filePath);
+        public static CompilationResult CompileFromFile(string filePath) {
+            return Compiler.CompileFromFile(filePath);
         }
 
         /// <summary>
@@ -66,8 +51,8 @@ namespace DynamicClass.Core {
         /// </summary>
         /// <param name="method">要转换的方法信息</param>
         /// <returns>转换后的Func委托</returns>
-        public Delegate ConvertToFuncDelegate(MethodInfo method) {
-            return _delegateConverter.ConvertToFuncDelegate(method);
+        public static Delegate ConvertToFuncDelegate(MethodInfo method) {
+            return DelegateConverter.ConvertToFuncDelegate(method);
         }
 
         /// <summary>
@@ -76,8 +61,8 @@ namespace DynamicClass.Core {
         /// <typeparam name="TFunc">Func委托类型，如 Func<int, string>、Func<double, double, bool> 等</typeparam>
         /// <param name="method">要转换的方法信息</param>
         /// <returns>强类型的Func委托</returns>
-        public TFunc ConvertToTypedFuncDelegate<TFunc>(MethodInfo method) where TFunc : Delegate {
-            return _delegateConverter.ConvertToTypedFuncDelegate<TFunc>(method);
+        public static TFunc ConvertToTypedFuncDelegate<TFunc>(MethodInfo method) where TFunc : Delegate {
+            return DelegateConverter.ConvertToTypedFuncDelegate<TFunc>(method);
         }
 
         /// <summary>

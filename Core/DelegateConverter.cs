@@ -8,15 +8,13 @@ namespace DynamicClass.Core {
     /// 初始化委托转换器
     /// </remarks>
     /// <param name="methodValidator">方法验证器实例</param>
-    internal class DelegateConverter(MethodValidator methodValidator) {
-        private readonly MethodValidator _methodValidator = methodValidator ?? throw new ArgumentNullException(nameof(methodValidator));
-
+    internal static class DelegateConverter {
         /// <summary>
         /// 将方法转换为对应的Func委托
         /// </summary>
         /// <param name="method">要转换的方法信息</param>
         /// <returns>转换后的Func委托</returns>
-        internal Delegate ConvertToFuncDelegate(MethodInfo method) {
+        internal static Delegate ConvertToFuncDelegate(MethodInfo method) {
             if (method == null) {
                 throw new ArgumentNullException(nameof(method), "方法信息不能为空");
             }
@@ -56,7 +54,7 @@ namespace DynamicClass.Core {
         /// <typeparam name="TFunc">Func委托类型，如 Func<int, string>、Func<double, double, bool> 等</typeparam>
         /// <param name="method">要转换的方法信息</param>
         /// <returns>强类型的Func委托</returns>
-        internal TFunc ConvertToTypedFuncDelegate<TFunc>(MethodInfo method) where TFunc : Delegate {
+        internal static TFunc ConvertToTypedFuncDelegate<TFunc>(MethodInfo method) where TFunc : Delegate {
             if (method == null) {
                 throw new ArgumentNullException(nameof(method), "方法信息不能为空");
             }

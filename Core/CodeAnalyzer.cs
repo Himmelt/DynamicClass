@@ -7,7 +7,7 @@ namespace DynamicClass.Core {
     /// <summary>
     /// 代码分析器，负责分析代码并检测所需的程序集引用
     /// </summary>
-    internal class CodeAnalyzer {
+    internal static class CodeAnalyzer {
         /// <summary>
         /// 程序集检测规则
         /// </summary>
@@ -328,11 +328,11 @@ namespace DynamicClass.Core {
         /// <param name="namespacePattern">命名空间模式</param>
         /// <param name="typePatterns">类型模式</param>
         internal static void RegisterAssemblyRule(string assemblyName, string namespacePattern, params string[] typePatterns) {
-            var rules = new List<AssemblyDetectionRule>();
-
-            // 添加命名空间检测规则
-            rules.Add(new AssemblyDetectionRule(assemblyName, code =>
-                Regex.IsMatch(code, $@"using\s+{namespacePattern}")));
+            var rules = new List<AssemblyDetectionRule> {
+                // 添加命名空间检测规则
+                new(assemblyName, code =>
+                    Regex.IsMatch(code, $@"using\s+{namespacePattern}"))
+            };
 
             // 添加类型检测规则
             foreach (var pattern in typePatterns) {
