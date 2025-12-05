@@ -29,7 +29,7 @@ namespace DynamicClass.Core {
         /// </summary>
         /// <param name="assembly">编译后的程序集</param>
         /// <returns>公共静态方法列表</returns>
-        public static List<MethodInfo> GetPublicStaticMethods(Assembly assembly) {
+        public static List<MethodInfo> GetPublicStaticMethods(Assembly? assembly) {
             if (assembly == null) {
                 throw new ArgumentNullException(nameof(assembly), "程序集不能为空");
             }

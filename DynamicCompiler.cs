@@ -30,7 +30,7 @@ namespace DynamicClass {
         /// </summary>
         /// <param name="assembly">编译后的程序集</param>
         /// <returns>公共静态方法列表</returns>
-        public static List<MethodInfo> GetPublicStaticMethods(Assembly assembly) {
+        public static List<MethodInfo> GetPublicStaticMethods(Assembly? assembly) {
             return Core.DynamicCompiler.GetPublicStaticMethods(assembly);
         }
 
