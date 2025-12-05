@@ -50,6 +50,27 @@ namespace DynamicClass.Core {
         }
 
         /// <summary>
+        /// 从文本文件编译代码
+        /// </summary>
+        /// <param name="filePath">文件路径</param>
+        /// <returns>编译结果</returns>
+        internal static CompilationResult CompileFromFile(string filePath) {
+            if (string.IsNullOrWhiteSpace(filePath)) {
+                throw new ArgumentNullException(nameof(filePath), "文件路径不能为空");
+            }
+
+            if (!File.Exists(filePath)) {
+                throw new FileNotFoundException("指定的文件不存在", filePath);
+            }
+
+            // 读取文件内容
+            string code = File.ReadAllText(filePath);
+
+            // 调用字符串编译方法
+            return CompileCode(code);
+        }
+
+        /// <summary>
         /// 编译语法树并返回结果
         /// </summary>
         /// <param name="compilation">编译对象</param>
@@ -70,27 +91,6 @@ namespace DynamicClass.Core {
                 }
                 return new CompilationResult { Success = false, ErrorMessage = errors.ToString(), Assembly = null };
             }
-        }
-
-        /// <summary>
-        /// 从文本文件编译代码
-        /// </summary>
-        /// <param name="filePath">文件路径</param>
-        /// <returns>编译结果</returns>
-        internal static CompilationResult CompileFromFile(string filePath) {
-            if (string.IsNullOrWhiteSpace(filePath)) {
-                throw new ArgumentNullException(nameof(filePath), "文件路径不能为空");
-            }
-
-            if (!File.Exists(filePath)) {
-                throw new FileNotFoundException("指定的文件不存在", filePath);
-            }
-
-            // 读取文件内容
-            string code = File.ReadAllText(filePath);
-
-            // 调用字符串编译方法
-            return CompileCode(code);
         }
     }
 }
