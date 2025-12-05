@@ -66,28 +66,6 @@ namespace DynamicClass.Core {
         }
 
         /// <summary>
-        /// 验证生成的Func委托是否能够正确执行
-        /// </summary>
-        /// <param name="funcDelegate">要验证的Func委托</param>
-        /// <param name="parameters">执行委托所需的参数</param>
-        /// <returns>验证结果，包含执行结果和错误信息</returns>
-        public static ValidationResult ValidateFuncDelegate(Delegate funcDelegate, params object[] parameters) {
-            if (funcDelegate == null) {
-                throw new ArgumentNullException(nameof(funcDelegate), "委托不能为空");
-            }
-
-            try {
-                // 执行委托
-                object? result = funcDelegate.DynamicInvoke(parameters);
-                return new ValidationResult { Success = true, Result = result, ErrorMessage = string.Empty };
-            } catch (Exception ex) {
-                // 处理执行异常
-                string errorMessage = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
-                return new ValidationResult { Success = false, ErrorMessage = errorMessage, Result = null };
-            }
-        }
-
-        /// <summary>
         /// 动态扩展检测规则的方法
         /// </summary>
         /// <param name="assemblyName">程序集名称</param>

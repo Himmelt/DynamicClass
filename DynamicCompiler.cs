@@ -54,16 +54,6 @@ namespace DynamicClass {
         }
 
         /// <summary>
-        /// 验证生成的Func委托是否能够正确执行
-        /// </summary>
-        /// <param name="funcDelegate">要验证的Func委托</param>
-        /// <param name="parameters">执行委托所需的参数</param>
-        /// <returns>验证结果，包含执行结果和错误信息</returns>
-        public static ValidationResult ValidateFuncDelegate(Delegate funcDelegate, params object[] parameters) {
-            return Core.DynamicCompiler.ValidateFuncDelegate(funcDelegate, parameters);
-        }
-
-        /// <summary>
         /// 动态扩展检测规则的方法
         /// </summary>
         /// <param name="assemblyName">程序集名称</param>
