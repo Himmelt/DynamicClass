@@ -1,3 +1,4 @@
+using DynamicClass.Models;
 using System.Reflection;
 
 namespace DynamicClass.Core {
