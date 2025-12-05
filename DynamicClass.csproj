@@ -17,4 +17,8 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="DynamicClass.Tests" />
+  </ItemGroup>
+
 </Project>
