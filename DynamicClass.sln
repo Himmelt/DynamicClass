@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.0.11222.15 d18.0
+VisualStudioVersion = 18.0.11222.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicClass", "DynamicClass.csproj", "{4CC5483B-C48B-7D63-94D1-DB8A8F3ED42A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicClass.Tests", "DynamicClass.Tests\DynamicClass.Tests.csproj", "{6CAC360B-2E54-FC73-37CC-A35CFEE74093}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{4CC5483B-C48B-7D63-94D1-DB8A8F3ED42A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CC5483B-C48B-7D63-94D1-DB8A8F3ED42A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4CC5483B-C48B-7D63-94D1-DB8A8F3ED42A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CAC360B-2E54-FC73-37CC-A35CFEE74093}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CAC360B-2E54-FC73-37CC-A35CFEE74093}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CAC360B-2E54-FC73-37CC-A35CFEE74093}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CAC360B-2E54-FC73-37CC-A35CFEE74093}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
