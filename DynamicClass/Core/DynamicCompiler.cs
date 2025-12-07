@@ -1,7 +1,7 @@
-using DynamicCompiler.Models;
+using DynamicClass.Models;
 using System.Reflection;
 
-namespace DynamicCompiler.Core {
+namespace DynamicClass.Core {
     /// <summary>
     /// 动态编译工具类，用于编译C#静态类代码并将方法转换为Func委托（对外统一接口）
     /// </summary>

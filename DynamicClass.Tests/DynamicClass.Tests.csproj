@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DynamicCompiler\DynamicCompiler.csproj" />
+    <ProjectReference Include="..\DynamicClass\DynamicClass.csproj" />
   </ItemGroup>
 
   <ItemGroup>

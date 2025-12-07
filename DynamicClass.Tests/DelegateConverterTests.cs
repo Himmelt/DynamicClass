@@ -1,6 +1,7 @@
+using DynamicClass.Core;
 using System.Reflection;
 
-namespace DynamicCompiler.Tests {
+namespace DynamicClass.Tests {
     public class DelegateConverterTests {
         [Fact]
         public void ConvertToDelegate_ValidMethod_ReturnsDelegate() {

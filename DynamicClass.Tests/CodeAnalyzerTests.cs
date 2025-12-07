@@ -1,4 +1,6 @@
-namespace DynamicCompiler.Tests {
+using DynamicClass.Core;
+
+namespace DynamicClass.Tests {
     public class CodeAnalyzerTests {
         [Fact]
         public void ExtractUsingStatements_ValidCode_ReturnsUsingStatements() {

@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
 VisualStudioVersion = 18.0.11222.15
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicCompiler", "DynamicCompiler\DynamicCompiler.csproj", "{E919B8BB-3532-F036-3B64-C5B42BFF14F3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicClass", "DynamicClass\DynamicClass.csproj", "{E919B8BB-3532-F036-3B64-C5B42BFF14F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicCompiler.Tests", "DynamicCompiler.Tests\DynamicCompiler.Tests.csproj", "{047DD12A-5B58-4DA5-9A89-AC2CE2AA1E5A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicClass.Tests", "DynamicClass.Tests\DynamicClass.Tests.csproj", "{047DD12A-5B58-4DA5-9A89-AC2CE2AA1E5A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

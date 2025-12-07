@@ -1,4 +1,6 @@
-namespace DynamicCompiler.Tests {
+using DynamicClass.Core;
+
+namespace DynamicClass.Tests {
     public class DynamicCompilerTests {
         [Fact]
         public void CompileCode_ValidCode_ReturnsSuccess() {
@@ -6,7 +8,7 @@ namespace DynamicCompiler.Tests {
             string validCode = "using System; public static class Calculator { public static int Add(int a, int b) { return a + b; } }";
 
             // Act
-            var result = DynamicCompiler.CompileCode(validCode);
+            var result = DynamicClass.Core.DynamicCompiler.CompileCode(validCode);
 
             // Assert
             Assert.True(result.Success);

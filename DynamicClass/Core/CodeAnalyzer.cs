@@ -1,9 +1,9 @@
-using DynamicCompiler.Models;
+using DynamicClass.Models;
 using Microsoft.CodeAnalysis;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace DynamicCompiler.Core {
+namespace DynamicClass.Core {
     /// <summary>
     /// 代码分析器，负责分析代码并检测所需的程序集引用
     /// </summary>

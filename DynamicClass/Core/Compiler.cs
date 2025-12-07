@@ -1,10 +1,10 @@
-using DynamicCompiler.Models;
+using DynamicClass.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using System.Reflection;
 
-namespace DynamicCompiler.Core {
+namespace DynamicClass.Core {
     /// <summary>
     /// 动态编译器，负责执行实际的代码编译操作
     /// </summary>

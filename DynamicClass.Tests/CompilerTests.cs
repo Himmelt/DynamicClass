@@ -1,4 +1,6 @@
-namespace DynamicCompiler.Tests {
+using DynamicClass.Core;
+
+namespace DynamicClass.Tests {
     public class CompilerTests {
         [Fact]
         public void CompileCode_ValidCode_ReturnsSuccess() {
