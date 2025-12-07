@@ -23,11 +23,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Using Include="Xunit" />
+    <ProjectReference Include="..\DynamicCompiler\DynamicCompiler.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DynamicCompiler.csproj" />
+    <Using Include="Xunit" />
   </ItemGroup>
 
 </Project>
