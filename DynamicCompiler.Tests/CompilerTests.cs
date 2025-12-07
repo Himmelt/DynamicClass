@@ -1,15 +1,7 @@
-using DynamicClass.Core;
-using DynamicClass.Models;
-using System.IO;
-using Xunit;
-
-namespace DynamicClass.Tests
-{
-    public class CompilerTests
-    {
+namespace DynamicCompiler.Tests {
+    public class CompilerTests {
         [Fact]
-        public void CompileCode_ValidCode_ReturnsSuccess()
-        {
+        public void CompileCode_ValidCode_ReturnsSuccess() {
             // Arrange
             string validCode = "using System; public static class Calculator { public static int Add(int a, int b) { return a + b; } }";
 
@@ -23,8 +15,7 @@ namespace DynamicClass.Tests
         }
 
         [Fact]
-        public void CompileCode_InvalidCode_ReturnsFailure()
-        {
+        public void CompileCode_InvalidCode_ReturnsFailure() {
             // Arrange
             string invalidCode = "public static class InvalidCalculator { public static int Add(int a, int b) { return a + b } }";
 
@@ -38,8 +29,7 @@ namespace DynamicClass.Tests
         }
 
         [Fact]
-        public void CompileCode_EmptyCode_ThrowsException()
-        {
+        public void CompileCode_EmptyCode_ThrowsException() {
             // Act & Assert
             Assert.Throws<ArgumentNullException>(() => Compiler.CompileCode(null));
             Assert.Throws<ArgumentNullException>(() => Compiler.CompileCode(string.Empty));
@@ -47,8 +37,7 @@ namespace DynamicClass.Tests
         }
 
         [Fact]
-        public void CompileFromFile_ValidFile_ReturnsSuccess()
-        {
+        public void CompileFromFile_ValidFile_ReturnsSuccess() {
             // Arrange
             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "TestFile.cs.txt");
             filePath = Path.GetFullPath(filePath);
@@ -64,8 +53,7 @@ namespace DynamicClass.Tests
         }
 
         [Fact]
-        public void CompileFromFile_NonExistentFile_ThrowsException()
-        {
+        public void CompileFromFile_NonExistentFile_ThrowsException() {
             // Arrange
             string nonExistentFile = Path.Combine(Directory.GetCurrentDirectory(), "NonExistentFile.cs");
 
@@ -74,8 +62,7 @@ namespace DynamicClass.Tests
         }
 
         [Fact]
-        public void CompileFromFile_EmptyFilePath_ThrowsException()
-        {
+        public void CompileFromFile_EmptyFilePath_ThrowsException() {
             // Act & Assert
             Assert.Throws<ArgumentNullException>(() => Compiler.CompileFromFile(null));
             Assert.Throws<ArgumentNullException>(() => Compiler.CompileFromFile(string.Empty));

@@ -1,4 +1,4 @@
-namespace DynamicClass.Models {
+namespace DynamicCompiler.Models {
     /// <summary>
     /// 程序集检测规则类
     /// </summary>

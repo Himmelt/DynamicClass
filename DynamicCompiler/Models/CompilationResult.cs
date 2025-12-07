@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace DynamicClass.Models {
+namespace DynamicCompiler.Models {
     /// <summary>
     /// 编译结果类
     /// </summary>

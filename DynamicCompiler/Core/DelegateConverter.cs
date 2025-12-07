@@ -1,7 +1,7 @@
-using System.Reflection;
 using System.Linq.Expressions;
+using System.Reflection;
 
-namespace DynamicClass.Core {
+namespace DynamicCompiler.Core {
     /// <summary>
     /// 委托转换器，负责将方法信息转换为Func委托
     /// </summary>

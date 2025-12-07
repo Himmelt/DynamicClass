@@ -1,14 +1,7 @@
-using DynamicClass.Core;
-using DynamicClass.Models;
-using Xunit;
-
-namespace DynamicClass.Tests
-{
-    public class CodeAnalyzerTests
-    {
+namespace DynamicCompiler.Tests {
+    public class CodeAnalyzerTests {
         [Fact]
-        public void ExtractUsingStatements_ValidCode_ReturnsUsingStatements()
-        {
+        public void ExtractUsingStatements_ValidCode_ReturnsUsingStatements() {
             // Arrange
             string codeWithUsings = "using System; using System.Collections.Generic; using System.Linq; public static class Calculator { public static int Add(int a, int b) { return a + b; } }";
 
@@ -24,8 +17,7 @@ namespace DynamicClass.Tests
         }
 
         [Fact]
-        public void ExtractUsingStatements_NoUsings_ReturnsEmptySet()
-        {
+        public void ExtractUsingStatements_NoUsings_ReturnsEmptySet() {
             // Arrange
             string codeWithoutUsings = "public static class Calculator { public static int Add(int a, int b) { return a + b; } }";
 
@@ -38,8 +30,7 @@ namespace DynamicClass.Tests
         }
 
         [Fact]
-        public void AnalyzeUsedTypes_ValidCode_ReturnsUsedTypes()
-        {
+        public void AnalyzeUsedTypes_ValidCode_ReturnsUsedTypes() {
             // Arrange
             string codeWithTypes = "using System; using System.Collections.Generic; public static class CollectionDemo { public static List<int> CreateList() { return new List<int> { 1, 2, 3, 4, 5 }; } }";
 
@@ -53,8 +44,7 @@ namespace DynamicClass.Tests
         }
 
         [Fact]
-        public void RegisterAssemblyRule_AddsNewRule()
-        {
+        public void RegisterAssemblyRule_AddsNewRule() {
             // Arrange
             string testAssembly = "TestAssembly";
             string testNamespace = "TestNamespace";
@@ -73,8 +63,7 @@ namespace DynamicClass.Tests
         }
 
         [Fact]
-        public void GetRequiredReferences_ReturnsBaseReferences()
-        {
+        public void GetRequiredReferences_ReturnsBaseReferences() {
             // Arrange
             string simpleCode = "public static class SimpleClass { public static int Method1(int a, int b) { return a + b; } }";
 

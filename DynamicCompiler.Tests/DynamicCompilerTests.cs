@@ -1,15 +1,7 @@
-using System;
-using System.IO;
-using DynamicClass.Core;
-using Xunit;
-
-namespace DynamicClass.Tests
-{
-    public class DynamicCompilerTests
-    {
+namespace DynamicCompiler.Tests {
+    public class DynamicCompilerTests {
         [Fact]
-        public void CompileCode_ValidCode_ReturnsSuccess()
-        {
+        public void CompileCode_ValidCode_ReturnsSuccess() {
             // Arrange
             string validCode = "using System; public static class Calculator { public static int Add(int a, int b) { return a + b; } }";
 
@@ -23,8 +15,7 @@ namespace DynamicClass.Tests
         }
 
         [Fact]
-        public void CompileCode_InvalidCode_ReturnsFailure()
-        {
+        public void CompileCode_InvalidCode_ReturnsFailure() {
             // Arrange
             string invalidCode = "public static class InvalidCalculator { public static int Add(int a, int b) { return a + b } }";
 
@@ -38,8 +29,7 @@ namespace DynamicClass.Tests
         }
 
         [Fact]
-        public void GetPublicStaticMethods_ReturnsAllMethods()
-        {
+        public void GetPublicStaticMethods_ReturnsAllMethods() {
             // Arrange
             string validCode = "using System; public static class Calculator { public static int Add(int a, int b) { return a + b; } public static int Subtract(int a, int b) { return a - b; } }";
             var compilationResult = DynamicCompiler.CompileCode(validCode);
@@ -55,8 +45,7 @@ namespace DynamicClass.Tests
         }
 
         [Fact]
-        public void ConvertToDelegate_ValidMethod_ReturnsDelegate()
-        {
+        public void ConvertToDelegate_ValidMethod_ReturnsDelegate() {
             // Arrange
             string validCode = "using System; public static class Calculator { public static int Add(int a, int b) { return a + b; } }";
             var compilationResult = DynamicCompiler.CompileCode(validCode);
@@ -72,8 +61,7 @@ namespace DynamicClass.Tests
         }
 
         [Fact]
-        public void ConvertToTypedFunc_ValidMethod_ReturnsTypedDelegate()
-        {
+        public void ConvertToTypedFunc_ValidMethod_ReturnsTypedDelegate() {
             // Arrange
             string validCode = "using System; public static class MathOperations { public static int Square(int x) { return x * x; } }";
             var compilationResult = DynamicCompiler.CompileCode(validCode);
@@ -91,8 +79,7 @@ namespace DynamicClass.Tests
         }
 
         [Fact]
-        public void CompileFromFile_ValidFile_ReturnsSuccess()
-        {
+        public void CompileFromFile_ValidFile_ReturnsSuccess() {
             // Arrange
             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "TestFile.cs.txt");
             filePath = Path.GetFullPath(filePath);

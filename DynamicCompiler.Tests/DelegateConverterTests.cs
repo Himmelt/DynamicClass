@@ -1,14 +1,9 @@
-using DynamicClass.Core;
 using System.Reflection;
-using Xunit;
 
-namespace DynamicClass.Tests
-{
-    public class DelegateConverterTests
-    {
+namespace DynamicCompiler.Tests {
+    public class DelegateConverterTests {
         [Fact]
-        public void ConvertToDelegate_ValidMethod_ReturnsDelegate()
-        {
+        public void ConvertToDelegate_ValidMethod_ReturnsDelegate() {
             // Arrange
             MethodInfo addMethod = typeof(Calculator).GetMethod("Add", BindingFlags.Public | BindingFlags.Static);
 
@@ -21,8 +16,7 @@ namespace DynamicClass.Tests
         }
 
         [Fact]
-        public void ConvertToDelegate_MethodWithNoParameters_ReturnsDelegate()
-        {
+        public void ConvertToDelegate_MethodWithNoParameters_ReturnsDelegate() {
             // Arrange
             MethodInfo helloMethod = typeof(Calculator).GetMethod("GetHelloMessage", BindingFlags.Public | BindingFlags.Static);
 
@@ -34,15 +28,13 @@ namespace DynamicClass.Tests
         }
 
         [Fact]
-        public void ConvertToDelegate_NullMethod_ThrowsException()
-        {
+        public void ConvertToDelegate_NullMethod_ThrowsException() {
             // Act & Assert
             Assert.Throws<ArgumentNullException>(() => DelegateConverter.ConvertToDelegate(null));
         }
 
         [Fact]
-        public void ConvertToTypedFunc_ValidMethod_ReturnsTypedDelegate()
-        {
+        public void ConvertToTypedFunc_ValidMethod_ReturnsTypedDelegate() {
             // Arrange
             MethodInfo squareMethod = typeof(MathOperations).GetMethod("Square", BindingFlags.Public | BindingFlags.Static);
 
@@ -57,8 +49,7 @@ namespace DynamicClass.Tests
         }
 
         [Fact]
-        public void ConvertToTypedFunc_DoubleAdd_ReturnsCorrectResult()
-        {
+        public void ConvertToTypedFunc_DoubleAdd_ReturnsCorrectResult() {
             // Arrange
             MethodInfo addMethod = typeof(MathOperations).GetMethod("Add", BindingFlags.Public | BindingFlags.Static);
 
@@ -73,35 +64,28 @@ namespace DynamicClass.Tests
         }
 
         [Fact]
-        public void ConvertToTypedFunc_NullMethod_ThrowsException()
-        {
+        public void ConvertToTypedFunc_NullMethod_ThrowsException() {
             // Act & Assert
             Assert.Throws<ArgumentNullException>(() => DelegateConverter.ConvertToTypedFunc<Func<int, int>>(null));
         }
 
         // 辅助测试类
-        public static class Calculator
-        {
-            public static int Add(int a, int b)
-            {
+        public static class Calculator {
+            public static int Add(int a, int b) {
                 return a + b;
             }
 
-            public static string GetHelloMessage()
-            {
+            public static string GetHelloMessage() {
                 return "Hello, World!";
             }
         }
 
-        public static class MathOperations
-        {
-            public static int Square(int x)
-            {
+        public static class MathOperations {
+            public static int Square(int x) {
                 return x * x;
             }
 
-            public static double Add(double a, double b)
-            {
+            public static double Add(double a, double b) {
                 return a + b;
             }
         }
