@@ -33,13 +33,13 @@ DynamicClass内置了对多种常用.NET程序集的检测支持：
 您可以通过NuGet安装DynamicClass：
 
 ```bash
-PM> Install-Package DynamicClass
+PM> Install-Package Himmelt.DynamicClass
 ```
 
 或使用.NET CLI：
 
 ```bash
-dotnet add package DynamicClass
+dotnet add package Himmelt.DynamicClass
 ```
 
 ## 快速开始

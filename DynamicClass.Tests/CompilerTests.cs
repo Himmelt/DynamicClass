@@ -41,7 +41,7 @@ namespace DynamicClass.Tests {
         [Fact]
         public void CompileFromFile_ValidFile_ReturnsSuccess() {
             // Arrange
-            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "TestFile.cs.txt");
+            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "TestFile.cs");
             filePath = Path.GetFullPath(filePath);
             Assert.True(File.Exists(filePath), "测试文件不存在: " + filePath);
 

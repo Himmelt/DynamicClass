@@ -5,10 +5,20 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PackageId>Himmelt.$(AssemblyName)</PackageId>
+    <PackageId>Himmelt.DynamicClass</PackageId>
     <Authors>Himmelt</Authors>
     <Version>1.0.0-beta1</Version>
+    <Title>轻量级的C#动态代码编译库</Title>
+    <Description>轻量级的C#动态代码编译库</Description>
+    <Copyright>Copyright (c) 2025 Himmelt</Copyright>
+    <PackageProjectUrl>https://github.com/Himmelt/DynamicClass</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/Himmelt/DynamicClass.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageIcon>nuget_logo.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +27,24 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="DynamicClass.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="nuget_logo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
