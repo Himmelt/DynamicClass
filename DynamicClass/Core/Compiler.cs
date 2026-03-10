@@ -50,6 +50,49 @@ namespace DynamicClass.Core {
         }
 
         /// <summary>
+        /// 编译多个C#静态类代码并返回编译结果
+        /// </summary>
+        /// <param name="codes">要编译的C#静态类代码数组</param>
+        /// <returns>编译结果，包含程序集和编译错误信息</returns>
+        internal static CompilationResult CompileCode(string[] codes) {
+            if (codes == null || codes.Length == 0) {
+                throw new ArgumentException("代码数组不能为空", nameof(codes));
+            }
+
+            foreach (var code in codes) {
+                if (string.IsNullOrWhiteSpace(code)) {
+                    throw new ArgumentException("代码不能为空", nameof(codes));
+                }
+            }
+
+            var syntaxTrees = new List<SyntaxTree>();
+            var allCode = new System.Text.StringBuilder();
+
+            foreach (var code in codes) {
+                allCode.AppendLine(code);
+                SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(code);
+                syntaxTrees.Add(syntaxTree);
+            }
+
+            string assemblyName = Path.GetRandomFileName();
+
+            var references = CodeAnalyzer.GetRequiredReferences(allCode.ToString());
+
+            var compilationOptions = new CSharpCompilationOptions(
+                OutputKind.DynamicallyLinkedLibrary,
+                optimizationLevel: OptimizationLevel.Debug,
+                assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default);
+
+            CSharpCompilation compilation = CSharpCompilation.Create(
+                assemblyName,
+                syntaxTrees: syntaxTrees,
+                references: references,
+                options: compilationOptions);
+
+            return EmitCompilation(compilation);
+        }
+
+        /// <summary>
         /// 从文本文件编译代码
         /// </summary>
         /// <param name="filePath">文件路径</param>
@@ -68,6 +111,35 @@ namespace DynamicClass.Core {
 
             // 调用字符串编译方法
             return CompileCode(code);
+        }
+
+        /// <summary>
+        /// 从多个文本文件编译代码
+        /// </summary>
+        /// <param name="filePaths">文件路径数组</param>
+        /// <returns>编译结果</returns>
+        internal static CompilationResult CompileFromFiles(string[] filePaths) {
+            if (filePaths == null || filePaths.Length == 0) {
+                throw new ArgumentException("文件路径数组不能为空", nameof(filePaths));
+            }
+
+            foreach (var filePath in filePaths) {
+                if (string.IsNullOrWhiteSpace(filePath)) {
+                    throw new ArgumentException("文件路径不能为空", nameof(filePaths));
+                }
+
+                if (!File.Exists(filePath)) {
+                    throw new FileNotFoundException("指定的文件不存在", filePath);
+                }
+            }
+
+            var codes = new List<string>();
+            foreach (var filePath in filePaths) {
+                string code = File.ReadAllText(filePath);
+                codes.Add(code);
+            }
+
+            return CompileCode([.. codes]);
         }
 
         /// <summary>

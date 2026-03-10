@@ -25,6 +25,24 @@ namespace DynamicClass.Core {
         }
 
         /// <summary>
+        /// 编译多个C#静态类代码并返回编译结果
+        /// </summary>
+        /// <param name="codes">要编译的C#静态类代码数组</param>
+        /// <returns>编译结果，包含程序集和编译错误信息</returns>
+        public static CompilationResult CompileCode(string[] codes) {
+            return Compiler.CompileCode(codes);
+        }
+
+        /// <summary>
+        /// 从多个文本文件编译C#静态类代码并返回编译结果
+        /// </summary>
+        /// <param name="filePaths">要编译的文本文件路径数组</param>
+        /// <returns>编译结果，包含程序集和编译错误信息</returns>
+        public static CompilationResult CompileFromFiles(string[] filePaths) {
+            return Compiler.CompileFromFiles(filePaths);
+        }
+
+        /// <summary>
         /// 从编译后的程序集中获取所有公共静态方法
         /// </summary>
         /// <param name="assembly">编译后的程序集</param>

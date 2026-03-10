@@ -50,7 +50,7 @@ namespace DynamicClass.Tests {
             // Arrange
             string testAssembly = "TestAssembly";
             string testNamespace = "TestNamespace";
-            string[] testTypes = { "TestType1", "TestType2" };
+            string[] testTypes = ["TestType1", "TestType2"];
 
             // Act
             CodeAnalyzer.RegisterAssemblyRule(testAssembly, testNamespace, testTypes);

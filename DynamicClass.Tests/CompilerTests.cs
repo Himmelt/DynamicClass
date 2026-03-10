@@ -33,7 +33,7 @@ namespace DynamicClass.Tests {
         [Fact]
         public void CompileCode_EmptyCode_ThrowsException() {
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => Compiler.CompileCode(null));
+            Assert.Throws<ArgumentNullException>(() => Compiler.CompileCode([]));
             Assert.Throws<ArgumentNullException>(() => Compiler.CompileCode(string.Empty));
             Assert.Throws<ArgumentNullException>(() => Compiler.CompileCode("   "));
         }
@@ -66,7 +66,7 @@ namespace DynamicClass.Tests {
         [Fact]
         public void CompileFromFile_EmptyFilePath_ThrowsException() {
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => Compiler.CompileFromFile(null));
+            Assert.Throws<ArgumentNullException>(() => Compiler.CompileFromFiles([]));
             Assert.Throws<ArgumentNullException>(() => Compiler.CompileFromFile(string.Empty));
             Assert.Throws<ArgumentNullException>(() => Compiler.CompileFromFile("   "));
         }
