@@ -15,7 +15,7 @@ namespace DynamicClass.Core {
         /// </summary>
         /// <param name="method">要转换的方法信息</param>
         /// <returns>转换后的 Delegate 委托</returns>
-        internal static Delegate ConvertToDelegate(MethodInfo method) {
+        internal static Delegate ConvertToDelegate(MethodInfo? method) {
             if (method == null) {
                 throw new ArgumentNullException(nameof(method), "方法信息不能为空");
             }
@@ -44,7 +44,7 @@ namespace DynamicClass.Core {
         /// <typeparam name="TFunc">Func<> 委托类型，如 Func<int, string>、Func<double, double, bool> 等</typeparam>
         /// <param name="method">要转换的方法信息</param>
         /// <returns>强类型的 Func<> 委托</returns>
-        internal static TFunc ConvertToTypedFunc<TFunc>(MethodInfo method) where TFunc : Delegate {
+        internal static TFunc ConvertToTypedFunc<TFunc>(MethodInfo? method) where TFunc : Delegate {
             if (method == null) {
                 throw new ArgumentNullException(nameof(method), "方法信息不能为空");
             }

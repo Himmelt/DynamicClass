@@ -6,7 +6,8 @@ namespace DynamicClass.Tests {
         [Fact]
         public void ConvertToDelegate_ValidMethod_ReturnsDelegate() {
             // Arrange
-            MethodInfo addMethod = typeof(Calculator).GetMethod("Add", BindingFlags.Public | BindingFlags.Static);
+            var addMethod = typeof(Calculator).GetMethod("Add", BindingFlags.Public | BindingFlags.Static);
+            Assert.NotNull(addMethod);
 
             // Act
             var funcDelegate = DelegateConverter.ConvertToDelegate(addMethod);
@@ -19,7 +20,8 @@ namespace DynamicClass.Tests {
         [Fact]
         public void ConvertToDelegate_MethodWithNoParameters_ReturnsDelegate() {
             // Arrange
-            MethodInfo helloMethod = typeof(Calculator).GetMethod("GetHelloMessage", BindingFlags.Public | BindingFlags.Static);
+            var helloMethod = typeof(Calculator).GetMethod("GetHelloMessage", BindingFlags.Public | BindingFlags.Static);
+            Assert.NotNull(helloMethod);
 
             // Act
             var funcDelegate = DelegateConverter.ConvertToDelegate(helloMethod);
@@ -37,7 +39,8 @@ namespace DynamicClass.Tests {
         [Fact]
         public void ConvertToTypedFunc_ValidMethod_ReturnsTypedDelegate() {
             // Arrange
-            MethodInfo squareMethod = typeof(MathOperations).GetMethod("Square", BindingFlags.Public | BindingFlags.Static);
+            var squareMethod = typeof(MathOperations).GetMethod("Square", BindingFlags.Public | BindingFlags.Static);
+            Assert.NotNull(squareMethod);
 
             // Act
             var funcDelegate = DelegateConverter.ConvertToTypedFunc<Func<int, int>>(squareMethod);
@@ -52,7 +55,8 @@ namespace DynamicClass.Tests {
         [Fact]
         public void ConvertToTypedFunc_DoubleAdd_ReturnsCorrectResult() {
             // Arrange
-            MethodInfo addMethod = typeof(MathOperations).GetMethod("Add", BindingFlags.Public | BindingFlags.Static);
+            var addMethod = typeof(MathOperations).GetMethod("Add", BindingFlags.Public | BindingFlags.Static);
+            Assert.NotNull(addMethod);
 
             // Act
             var funcDelegate = DelegateConverter.ConvertToTypedFunc<Func<double, double, double>>(addMethod);
