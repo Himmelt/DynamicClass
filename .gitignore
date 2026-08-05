@@ -13,6 +13,7 @@ obj/
 # NuGet包缓存
 .nuget/
 /nupkg
+/artifacts
 
 # 编辑器生成的文件
 .vs/

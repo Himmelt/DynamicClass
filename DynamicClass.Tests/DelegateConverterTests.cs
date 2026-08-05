@@ -31,6 +31,20 @@ namespace DynamicClass.Tests {
         }
 
         [Fact]
+        public void ConvertToDelegate_VoidReturn_ReturnsDelegate() {
+            // Arrange
+            var greetMethod = typeof(Calculator).GetMethod("Greet", BindingFlags.Public | BindingFlags.Static);
+            Assert.NotNull(greetMethod);
+
+            // Act
+            var funcDelegate = DelegateConverter.ConvertToDelegate(greetMethod);
+
+            // Assert
+            Assert.NotNull(funcDelegate);
+            funcDelegate.DynamicInvoke(null);
+        }
+
+        [Fact]
         public void ConvertToDelegate_NullMethod_ThrowsException() {
             // Act & Assert
             Assert.Throws<ArgumentNullException>(() => DelegateConverter.ConvertToDelegate(null));
@@ -82,6 +96,9 @@ namespace DynamicClass.Tests {
 
             public static string GetHelloMessage() {
                 return "Hello, World!";
+            }
+
+            public static void Greet() {
             }
         }
 

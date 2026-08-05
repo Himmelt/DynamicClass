@@ -5,10 +5,6 @@ namespace DynamicClass.Core {
     /// <summary>
     /// 委托转换器，负责将方法信息转换为Func委托
     /// </summary>
-    /// <remarks>
-    /// 初始化委托转换器
-    /// </remarks>
-    /// <param name="methodValidator">方法验证器实例</param>
     internal static class DelegateConverter {
         /// <summary>
         /// 将方法转换为 Delegate 委托
@@ -39,11 +35,11 @@ namespace DynamicClass.Core {
         }
 
         /// <summary>
-        /// 将方法转换为强类型的 Func<> 委托
+        /// 将方法转换为强类型的 Func&lt;&gt; 委托
         /// </summary>
-        /// <typeparam name="TFunc">Func<> 委托类型，如 Func<int, string>、Func<double, double, bool> 等</typeparam>
+        /// <typeparam name="TFunc">Func&lt;&gt; 委托类型，如 Func&lt;int, string&gt;、Func&lt;double, double, bool&gt; 等</typeparam>
         /// <param name="method">要转换的方法信息</param>
-        /// <returns>强类型的 Func<> 委托</returns>
+        /// <returns>强类型的 Func&lt;&gt; 委托</returns>
         internal static TFunc ConvertToTypedFunc<TFunc>(MethodInfo? method) where TFunc : Delegate {
             if (method == null) {
                 throw new ArgumentNullException(nameof(method), "方法信息不能为空");

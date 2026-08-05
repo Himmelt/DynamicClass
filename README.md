@@ -1,36 +1,37 @@
 # DynamicClass
 
-DynamicClass是一个轻量级的C#动态代码编译库，允许您在运行时编译C#静态类代码，并将方法转换为强类型或弱类型的Func委托。该库具有智能的程序集引用检测功能，可以自动识别并添加代码所需的程序集引用。
+DynamicClass是一个轻量级的C#动态代码编译库，允许您在运行时编译C#静态类代码，并将方法转换为强类型或弱类型的Func委托。编译引用采用**运行时闭包**策略：自动引用当前进程可见的全部程序集，无需配置任何检测规则。
 
-> **注意**：本项目是由AI生成的，主要使用了Trae等工具辅助开发。
+> **注意**：本项目是由AI生成的，主要使用了 Trae IDE、Codex、GLM-5.2、DeepSeek-V4 等工具辅助开发。
 
 ## 功能特性
 
 - ✅ 运行时动态编译C#静态类代码
-- ✅ 支持从字符串或文件编译代码
-- ✅ 智能检测并添加所需的程序集引用
+- ✅ 支持从字符串、文件或多个文件编译代码
+- ✅ 自动引用运行时可见的全部程序集（框架、NuGet 包、宿主程序集）
 - ✅ 将编译后的方法转换为Delegate委托
 - ✅ 支持强类型的Func<>委托转换
-- ✅ 可扩展的程序集检测规则
 - ✅ 提供清晰的编译结果和错误信息
 
-## 支持的程序集
+## 引用策略
 
-DynamicClass内置了对多种常用.NET程序集的检测支持：
+动态编译时，编译器会引用运行时实际能解析的全部程序集，让编译代码看到的类型宇宙与运行时一致：
 
-- 核心.NET程序集（System.Linq、System.Collections.Generic等）
-- JSON处理（System.Text.Json、Newtonsoft.Json）
-- HTTP和网络（System.Net.Http）
-- 正则表达式（System.Text.RegularExpressions）
-- 诊断和调试（System.Diagnostics）
-- 数据库访问（System.Data、System.Data.SqlClient）
-- Entity Framework Core
-- Microsoft.Extensions系列库（Configuration、DependencyInjection、Logging）
-- ASP.NET Core（Microsoft.AspNetCore.Http）
+1. `TRUSTED_PLATFORM_ASSEMBLIES`：.NET 运行时框架的全部程序集
+2. `AppContext.BaseDirectory` 下的全部 `*.dll`：应用本地程序集与 NuGet 包（含未列入依赖清单的散装 DLL）
+3. 已加载程序集：兜底覆盖不在上述两处的程序集
+
+按程序集简单名去重，引用列表在进程生命周期内构建一次并缓存。因此动态代码可以**直接**使用任意运行时可见的库（如 `MathNet.Numerics`）或宿主程序集的公开 API，不需要预先注册规则。
+
+> **限制**：宿主程序不能以单文件方式发布（`PublishSingleFile`）。单文件会把托管程序集打进可执行文件，程序集不再以独立 DLL 文件存在（`Assembly.Location` 为空、应用目录下没有 DLL），运行时闭包将无法提供这些程序集的引用，动态代码编译会失败。
+
+> **限制**：宿主启用发布裁剪（`PublishTrimmed` 等）时，未被宿主代码引用的 NuGet 程序集（例如仅用于动态编译的 `MathNet.Numerics`）可能被裁剪并从输出目录移除，动态代码将无法引用它们。动态编译所需的程序集应通过裁剪配置显式保留。
 
 ## 安装
 
 您可以通过NuGet安装DynamicClass：
+
+支持 .NET 8、.NET 9、.NET 10。
 
 ```bash
 PM> Install-Package Himmelt.DynamicClass
@@ -136,15 +137,17 @@ else
 }
 ```
 
-### 4. 扩展程序集检测规则
+### 4. 多文件编译
 
 ```csharp
-// 注册自定义程序集检测规则
-DynamicCompiler.RegisterAssemblyRule(
-    assemblyName: "MyCustomLibrary",
-    namespacePattern: "MyCustomLibrary",
-    typePatterns: new[] { @"MyCustomType", @"MyOtherType" }
-);
+// 从多个字符串编译
+var result = DynamicCompiler.CompileCode([
+    "public static class Helper { public static int Twice(int x) => x * 2; }",
+    "public static class MainClass { public static int Calc(int x) => Helper.Twice(x) + 1; }"
+]);
+
+// 或从多个文件编译
+// var result = DynamicCompiler.CompileFromFiles(["Helper.cs", "Main.cs"]);
 ```
 
 ## API参考
@@ -154,17 +157,15 @@ DynamicCompiler.RegisterAssemblyRule(
 #### 编译方法
 
 - `CompilationResult CompileCode(string code)`: 编译C#静态类代码字符串
+- `CompilationResult CompileCode(string[] codes)`: 编译多段C#静态类代码
 - `CompilationResult CompileFromFile(string filePath)`: 从文件编译C#静态类代码
+- `CompilationResult CompileFromFiles(string[] filePaths)`: 从多个文件编译C#静态类代码
 
 #### 方法转换
 
 - `Delegate ConvertToDelegate(MethodInfo method)`: 将方法转换为Delegate委托
 - `TFunc ConvertToTypedFunc<TFunc>(MethodInfo method)`: 将方法转换为强类型Func委托
-- `List<MethodInfo> GetPublicStaticMethods(Assembly? assembly)`: 获取程序集中的所有公共静态方法
-
-#### 程序集规则
-
-- `void RegisterAssemblyRule(string assemblyName, string namespacePattern, params string[] typePatterns)`: 注册自定义程序集检测规则
+- `List<MethodInfo> GetPublicStaticMethods(Assembly? assembly)`: 获取程序集中的所有公共静态方法（不含属性访问器与运算符）
 
 ### CompilationResult 类
 
@@ -177,11 +178,8 @@ DynamicCompiler.RegisterAssemblyRule(
 1. 该库仅支持编译静态类代码
 2. 编译后的代码在内存中执行，不会生成物理文件
 3. 请确保编译的代码符合C#语法规范
-4. 某些高级功能可能需要额外的程序集引用
-
-## 示例
-
-查看`DynamicClass.Tests`项目以获取更多使用示例。
+4. 动态代码只能使用运行时可见的公开类型；编译结果通过 `Assembly.Load(byte[])` 加载到默认程序集加载上下文，与宿主类型统一
+5. 动态编译产物以 Release 优化级别生成且不包含 PDB 符号，无法对动态代码进行源码级调试
 
 ## 贡献
 

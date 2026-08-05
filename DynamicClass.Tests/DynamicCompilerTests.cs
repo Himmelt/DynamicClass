@@ -8,7 +8,7 @@ namespace DynamicClass.Tests {
             string validCode = "using System; public static class Calculator { public static int Add(int a, int b) { return a + b; } }";
 
             // Act
-            var result = DynamicClass.Core.DynamicCompiler.CompileCode(validCode);
+            var result = DynamicCompiler.CompileCode(validCode);
 
             // Assert
             Assert.True(result.Success);
@@ -47,6 +47,21 @@ namespace DynamicClass.Tests {
         }
 
         [Fact]
+        public void GetPublicStaticMethods_ExcludesPropertyAccessors() {
+            // Arrange：静态属性会生成 get_Value 访问器，不应被当作普通方法返回
+            string code = "public static class Demo { public static int Value => 42; public static int Get() => Value; }";
+
+            // Act
+            var result = DynamicCompiler.CompileCode(code);
+            var methods = DynamicCompiler.GetPublicStaticMethods(result.Assembly);
+
+            // Assert
+            Assert.True(result.Success, result.ErrorMessage);
+            Assert.Single(methods);
+            Assert.Equal("Get", methods[0].Name);
+        }
+
+        [Fact]
         public void ConvertToDelegate_ValidMethod_ReturnsDelegate() {
             // Arrange
             string validCode = "using System; public static class Calculator { public static int Add(int a, int b) { return a + b; } }";
@@ -59,7 +74,7 @@ namespace DynamicClass.Tests {
 
             // Assert
             Assert.NotNull(funcDelegate);
-            Assert.IsAssignableFrom<Delegate>(funcDelegate);
+            Assert.IsType<Delegate>(funcDelegate, exactMatch: false);
         }
 
         [Fact]
@@ -94,6 +109,27 @@ namespace DynamicClass.Tests {
             Assert.True(result.Success);
             Assert.NotNull(result.Assembly);
             Assert.Empty(result.ErrorMessage);
+        }
+
+        [Fact]
+        public void CompileCode_EmptyOrWhitespace_ThrowsException() {
+            Assert.Throws<ArgumentException>(() => DynamicCompiler.CompileCode([]));
+            Assert.Throws<ArgumentNullException>(() => DynamicCompiler.CompileCode(string.Empty));
+            Assert.Throws<ArgumentNullException>(() => DynamicCompiler.CompileCode("   "));
+        }
+
+        [Fact]
+        public void CompileFromFile_NonExistentFile_ThrowsException() {
+            string nonExistentFile = Path.Combine(Directory.GetCurrentDirectory(), "NonExistentFile.cs");
+
+            Assert.Throws<FileNotFoundException>(() => DynamicCompiler.CompileFromFile(nonExistentFile));
+        }
+
+        [Fact]
+        public void CompileFromFile_EmptyOrWhitespacePath_ThrowsException() {
+            Assert.Throws<ArgumentException>(() => DynamicCompiler.CompileFromFiles([]));
+            Assert.Throws<ArgumentNullException>(() => DynamicCompiler.CompileFromFile(string.Empty));
+            Assert.Throws<ArgumentNullException>(() => DynamicCompiler.CompileFromFile("   "));
         }
     }
 }
