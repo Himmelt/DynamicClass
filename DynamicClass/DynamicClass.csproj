@@ -7,11 +7,11 @@
     <Nullable>enable</Nullable>
     <PackageId>Himmelt.DynamicClass</PackageId>
     <Authors>Himmelt</Authors>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <Title>轻量级的C#动态代码编译库</Title>
     <Description>轻量级的C#动态代码编译库</Description>
     <Copyright>Copyright (c) 2025-2026 Himmelt</Copyright>
-    <PackageReleaseNotes>运行时闭包引用策略；支持 .NET 8/9/10；动态编译使用 Release 优化。</PackageReleaseNotes>
+    <PackageReleaseNotes>运行时闭包引用策略；支持 .NET 8/9/10；动态编译使用 Release 优化；动态编译产物加载到可回收 AssemblyLoadContext，支持卸载以避免内存泄漏。</PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/Himmelt/DynamicClass</PackageProjectUrl>
     <RepositoryBranch>main</RepositoryBranch>
     <PackageTags>csharp;dynamic;compile;roslyn;runtime</PackageTags>

@@ -161,8 +161,16 @@ namespace DynamicClass.Core {
             EmitResult result = compilation.Emit(ms);
 
             if (result.Success) {
-                Assembly assembly = Assembly.Load(ms.ToArray());
-                return new CompilationResult { Assembly = assembly, Success = true, ErrorMessage = string.Empty };
+                // 使用可回收的 AssemblyLoadContext 加载，使宿主可以通过 Unload() 释放旧程序集
+                var loadContext = new CollectibleAssemblyLoadContext();
+                ms.Position = 0;
+                Assembly assembly = loadContext.LoadFromStream(ms);
+                return new CompilationResult {
+                    Assembly = assembly,
+                    LoadContext = loadContext,
+                    Success = true,
+                    ErrorMessage = string.Empty
+                };
             } else {
                 var errors = new System.Text.StringBuilder();
                 foreach (Diagnostic diagnostic in result.Diagnostics.Where(d => d.IsWarningAsError || d.Severity == DiagnosticSeverity.Error)) {
