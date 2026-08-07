@@ -39,7 +39,7 @@
 动态编译时，编译器会引用运行时实际能解析的全部程序集，让编译代码看到的类型宇宙与运行时一致：
 
 1. `TRUSTED_PLATFORM_ASSEMBLIES`：.NET 运行时框架的全部程序集
-2. `AppContext.BaseDirectory` 下的全部 `*.dll`：应用本地程序集与 NuGet 包（含未列入依赖清单的散装 DLL）
+2. `AppContext.BaseDirectory` 下的全部 `*.dll`：应用本地程序集与 NuGet 包（含未列入依赖清单的散装 DLL）；自动跳过原生/非托管 PE（如 `libexcelize.amd64.windows.dll`）
 3. 已加载程序集：兜底覆盖不在上述两处的程序集
 
 按程序集简单名去重，引用列表在进程生命周期内构建一次并缓存。因此动态代码可以**直接**使用任意运行时可见的库（如 `MathNet.Numerics`）或宿主程序集的公开 API，不需要预先注册规则。

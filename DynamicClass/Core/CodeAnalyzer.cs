@@ -1,4 +1,5 @@
 using Microsoft.CodeAnalysis;
+using System.Reflection;
 using System.Runtime.Loader;
 
 namespace DynamicClass.Core {
@@ -27,6 +28,9 @@ namespace DynamicClass.Core {
                 try {
                     var name = Path.GetFileNameWithoutExtension(path);
                     if (seen.Add(name)) {
+                        // 预校验：仅托管程序集可作为编译引用，跳过原生/非托管 PE（如 libexcelize.amd64.windows.dll）
+                        // AssemblyName.GetAssemblyName 对原生 PE 会抛 BadImageFormatException，由下方 catch 兜住
+                        _ = AssemblyName.GetAssemblyName(path);
                         refs.Add(MetadataReference.CreateFromFile(path));
                     }
                 } catch {
